@@ -18,6 +18,7 @@ COPY setup.py requirements.txt ./
 COPY src/ src/
 COPY config/ config/
 COPY utils/ utils/
+COPY pipeline/ pipeline/    
 COPY app.py .
 
 # Install dependencies
