@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-app
+spec:
+  replicas: 2 # 8gb ram so not >3
+  selector:
+    matchLabels:
+      app: ml-app
+  template:
+    metadata:
+      labels:
+        app: ml-app
+    spec:
+      containers:
+        - name: ml-app-container
+          image: gcr.io/rock-module-463223-b4/ml-project:latest
+          ports:
+            - containerPort: 5001 # Replace with the port your app listens on
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: ml-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
