@@ -47,7 +47,8 @@ jobs:
       - name: Verify index.html inside Docker image
         run: |
           docker create --name temp_container $GCR_IMAGE:latest
-          docker cp temp_container:/app/templates/index.html .
+          docker cp temp_container:/app/templates/index.html ./index_check.html
+          ls -l ./index_check.html
           docker rm temp_container
 
       - name: Push Docker image

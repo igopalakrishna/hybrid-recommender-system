@@ -1,27 +1,31 @@
-# Ignore large data and cache
-artifacts/
-.dvc/
-.dvc/cache/
+# Ignore virtual envs and local clutter
 venv/
 .venv/
 __pycache__/
 *.pyc
-*.pkl
+*.pyo
+*.pyd
+
+# Ignore data artifacts and logs
+artifacts/
+logs/
 *.csv
-*.h5
 *.npz
-*.log
+*.h5
 *.db
 
-# Ignore notebooks, logs, dev files
+# Ignore DVC cache and metadata
+.dvc/
+.dvc/cache/
+.dvc/tmp/
+.dvcignore
+
+# Ignore notebooks and local dev files
 notebook/
-logs/
 *.ipynb
 
-# Ignore version control and build files
+# Ignore version control and config
 .git/
 .gitignore
-.dockerignore
-.dvcignore
 .env
 *.egg-info/
