@@ -13,15 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy only the necessary files and folders
-COPY app.py .
-COPY setup.py requirements.txt ./
-COPY config/ config/
-COPY pipeline/ pipeline/
-COPY src/ src/
-COPY utils/ utils/
-COPY templates/ templates/
-COPY static/ static/
+
+COPY . .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
