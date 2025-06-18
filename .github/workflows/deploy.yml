@@ -1,0 +1,53 @@
+name: Deploy to GKE
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+      GCR_IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/ml-project
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install DVC with GCS support
+        run: pip install dvc[gs]
+
+      - name: Authenticate GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: DVC Pull model artifacts
+        run: dvc pull
+
+      - name: Configure Docker to use GCR
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: docker build -t $GCR_IMAGE:latest .
+
+      - name: Push Docker image
+        run: docker push $GCR_IMAGE:latest
+
+      - name: Get GKE credentials
+        run: gcloud container clusters get-credentials ml-app-cluster --region us-central1
+
+      - name: Deploy to GKE
+        run: kubectl apply -f deployment.yaml

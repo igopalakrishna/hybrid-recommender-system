@@ -1,0 +1,27 @@
+# Ignore large data and cache
+artifacts/
+.dvc/
+.dvc/cache/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pkl
+*.csv
+*.h5
+*.npz
+*.log
+*.db
+
+# Ignore notebooks, logs, dev files
+notebook/
+logs/
+*.ipynb
+
+# Ignore version control and build files
+.git/
+.gitignore
+.dockerignore
+.dvcignore
+.env
+*.egg-info/
