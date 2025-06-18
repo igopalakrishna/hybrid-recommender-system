@@ -47,13 +47,11 @@ jobs:
         run: docker push $GCR_IMAGE:latest
 
       - name: Get GKE credentials
-        run: gcloud container clusters get-credentials ml-app-cluster --region us-central1
-
-      - name: Install gke-gcloud-auth-plugin (Python fallback)
-        run: |
-          pip install --upgrade google-auth google-cloud-sdk
-          mkdir -p ~/.config/gcloud
-          echo '[plugin "gke-gcloud-auth-plugin"]\npath = ~/.local/bin/gke-gcloud-auth-plugin' >> ~/.config/gcloud/configurations/config_default
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ml-app-cluster
+          location: us-central1
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to GKE
         run: kubectl apply -f deployment.yaml
