@@ -1,9 +1,3 @@
-name: Deploy to GKE
-
-on:
-  push:
-    branches: [main]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,7 +13,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Install DVC with GCS support
         run: pip install dvc[gs]
@@ -40,8 +34,17 @@ jobs:
       - name: Configure Docker to use GCR
         run: gcloud auth configure-docker
 
-      - name: Build Docker image
-        run: docker build -t $GCR_IMAGE:latest .
+      - name: Check index.html before Docker build
+        run: ls -l templates/index.html
+
+      - name: Build Docker image (no cache)
+        run: docker build --no-cache -t $GCR_IMAGE:latest .
+
+      - name: Verify index.html inside Docker image
+        run: |
+          docker create --name temp_container $GCR_IMAGE:latest
+          docker cp temp_container:/app/templates/index.html .
+          docker rm temp_container
 
       - name: Push Docker image
         run: docker push $GCR_IMAGE:latest
