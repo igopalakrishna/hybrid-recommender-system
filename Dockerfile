@@ -18,8 +18,11 @@ COPY setup.py requirements.txt ./
 COPY src/ src/
 COPY config/ config/
 COPY utils/ utils/
-COPY pipeline/ pipeline/    
+COPY pipeline/ pipeline/
+COPY templates/ templates/
+COPY static/ static/        
 COPY app.py .
+
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
