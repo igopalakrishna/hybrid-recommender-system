@@ -19,10 +19,9 @@ COPY src/ src/
 COPY config/ config/
 COPY utils/ utils/
 COPY pipeline/ pipeline/
-COPY templates/ templates/
-COPY static/ static/        
+COPY templates/ /app/templates/
+COPY static/ /app/static/
 COPY app.py .
-
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -35,3 +34,4 @@ EXPOSE 5001
 
 # Default command
 CMD ["python", "app.py"]
+
