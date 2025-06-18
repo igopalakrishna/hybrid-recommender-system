@@ -49,5 +49,10 @@ jobs:
       - name: Get GKE credentials
         run: gcloud container clusters get-credentials ml-app-cluster --region us-central1
 
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+
       - name: Deploy to GKE
         run: kubectl apply -f deployment.yaml
